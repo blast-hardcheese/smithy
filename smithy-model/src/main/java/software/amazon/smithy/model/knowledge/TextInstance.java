@@ -46,7 +46,7 @@ public final class TextInstance {
         this.trait = trait;
         this.traitPropertyPath = traitPropertyPath != null
             ? ListUtils.copyOf(traitPropertyPath)
-            : null;
+            : ListUtils.of();
     }
 
     static TextInstance createNamespaceText(String namespace) {
@@ -70,6 +70,8 @@ public final class TextInstance {
 
     /**
      * Retrieves the type of TextLocationType associated with the text.
+     *
+     * @return Returns the TextLocationType.
      */
     public TextLocationType getLocationType() {
         return locationType;
@@ -77,24 +79,26 @@ public final class TextInstance {
 
     /**
      * Retrieves the text content of the TextInstance.
+     *
+     * @return Returns the model text.
      */
     public String getText() {
         return text;
     }
 
     /**
-     * Gets the shape the text is associated with.
+     * Gets the shape associated with the text.
      *
-     * Returns null if {@link TextLocationType} is NAMESPACE
+     * @return Returns the shape if the text is associated with one. Otherwise, returns null.
      */
     public Shape getShape() {
         return shape;
     }
 
     /**
-     * Gets the trait the text is associated with.
+     * Gets the trait associated with the text.
      *
-     * Returns null if {@link TextLocationType} is NAMESPACE or SHAPE
+     * @return Returns the trait if the text is associated with one. Otherwise, returns null.
      */
     public Trait getTrait() {
         return trait;
@@ -103,7 +107,7 @@ public final class TextInstance {
     /**
      * Gets the ordered path components within a trait's value the text is associated with.
      *
-     * Returns null if {@link TextLocationType} is NAMESPACE or SHAPE
+     * @return Returns the property path if the text is associated with a trait's value.
      */
     public List<String> getTraitPropertyPath() {
         return traitPropertyPath;

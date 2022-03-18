@@ -134,7 +134,7 @@ NoninclusiveTerms
 =================
 
 Validates that all text content in a model (i.e. shape names, member names,
-documentation, trait values, etc.) do not contain words that perpetuate cultural
+documentation, trait values, etc.) does not contain words that perpetuate cultural
 biases. This validator has a built-in set of bias terms that are commonly found
 in APIs along with suggested alternatives.
 
