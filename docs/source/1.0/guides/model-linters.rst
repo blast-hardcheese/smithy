@@ -143,7 +143,7 @@ number of leading or trailing whitespace or non-whitespace characters.
 
 This validator has built-in mappings from noninclusive terms to match model
 text to suggested alternatives. The configuration allows for additional terms
-to suggestions mappings to either replace or append the built-in mappings. If
+to suggestions mappings to either override or append the built-in mappings. If
 a match occurs and the suggested alternatives is empty, no suggestion is made
 in the generated warning message.
 
@@ -166,16 +166,16 @@ Configuration
        * - Property
          - Type
          - Description
-       * - appendNoninclusiveTerms
+       * - terms
          - { ``keyword`` -> [ ``alternatives`` ] }
-         - A set of noninclusive terms to suggestions to append to the built-in 
-           mappings. This property is not required and defaults to an empty set.
-           Cannot specify with `replaceNoninclusiveTerms`
-       * - replaceNoninclusiveTerms
-         - { ``keyword`` -> [ ``alternatives`` ] }
-         - A set of noninclusive terms to suggestions to replace the built-in 
-           mappings. This property is not required and defaults to an empty set.
-           Cannot specify with `appendNoninclusiveTerms`
+         - A set of noninclusive terms to suggestions to either override or replace
+           the built-in mappings. This property is not required unless
+           ``excludeDefaults`` is true. The default value is the empty set.
+       * - excludeDefaults
+         - ``boolean``
+         - A flag indicating whether or not the mappings set specified by ``terms``
+           configuration replaces the built-in set or appends additional mappings.
+           This property is not required and defaults to false.
 
 Example:
 
@@ -186,7 +186,8 @@ Example:
     metadata validators = [{
         name: "NoninclusiveTerms"
         configuration: {
-            appendNoninclusiveTerms: {
+            excludeDefaults: false,
+            terms: {
                 mankind: ["humankind"],
                 mailman: ["mail carrier", "postal worker"]
             }

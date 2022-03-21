@@ -62,23 +62,23 @@ public final class NoninclusiveTermsValidator extends AbstractValidator {
      * NoninclusiveTermsValidator configuration.
      */
     public static final class Config {
-        private Map<String, List<String>> appendNoninclusiveTerms = MapUtils.of();
-        private Map<String, List<String>> replaceNoninclusiveTerms = MapUtils.of();
+        private Map<String, List<String>> terms = MapUtils.of();
+        private Boolean excludeDefaults = Boolean.FALSE;
 
-        public Map<String, List<String>> getAppendNoninclusiveTerms() {
-            return appendNoninclusiveTerms;
+        public Map<String, List<String>> getTerms() {
+            return terms;
         }
 
-        public Map<String, List<String>> getReplaceNoninclusiveTerms() {
-            return replaceNoninclusiveTerms;
+        public void setTerms(Map<String, List<String>> terms) {
+            this.terms = terms;
         }
 
-        public void setAppendNoninclusiveTerms(Map<String, List<String>> terms) {
-            this.appendNoninclusiveTerms = terms;
+        public Boolean getExcludeDefaults() {
+            return excludeDefaults;
         }
 
-        public void setReplaceNoninclusiveTerms(Map<String, List<String>> terms) {
-            this.replaceNoninclusiveTerms = terms;
+        public void setExcludeDefaults(Boolean excludeDefaults) {
+            this.excludeDefaults = excludeDefaults;
         }
     }
 
@@ -86,20 +86,16 @@ public final class NoninclusiveTermsValidator extends AbstractValidator {
 
     private NoninclusiveTermsValidator(Config config) {
         Map<String, List<String>> termsMapInit = new HashMap<>(BUILT_IN_NONINCLUSIVE_TERMS);
-        if (!config.appendNoninclusiveTerms.isEmpty() && !config.replaceNoninclusiveTerms.isEmpty()) {
-            throw new IllegalArgumentException("Cannot specify both terms to replace "
-                                             + "built-ins and terms to append.");
-        }
-        if (!config.replaceNoninclusiveTerms.isEmpty()) {
-            termsMap = Collections.unmodifiableMap(config.replaceNoninclusiveTerms);
-        } else {
-            termsMapInit.putAll(config.appendNoninclusiveTerms);
+        if (!config.getExcludeDefaults()) {
+            termsMapInit.putAll(config.getTerms());
             termsMap = Collections.unmodifiableMap(termsMapInit);
-        }
-        //Prevent empty string from being a replacement term.
-        //It has no value and would screw up the find and replace logic.
-        if (termsMap.containsKey("")) {
-            throw new IllegalArgumentException("Empty string is not a valid non-inclusive term");
+        } else {
+            if (config.getTerms().isEmpty()) {
+                //This configuration combination makes the validator a no-op.
+                throw new IllegalArgumentException("Cannot set 'excludeDefaults' to true and leave "
+                                                 + "'terms' empty or unspecified.");
+            }
+            termsMap = Collections.unmodifiableMap(config.getTerms());
         }
     }
 
