@@ -63,7 +63,7 @@ public final class NoninclusiveTermsValidator extends AbstractValidator {
      */
     public static final class Config {
         private Map<String, List<String>> terms = MapUtils.of();
-        private Boolean excludeDefaults = Boolean.FALSE;
+        private boolean excludeDefaults;
 
         public Map<String, List<String>> getTerms() {
             return terms;
@@ -73,11 +73,11 @@ public final class NoninclusiveTermsValidator extends AbstractValidator {
             this.terms = terms;
         }
 
-        public Boolean getExcludeDefaults() {
+        public boolean getExcludeDefaults() {
             return excludeDefaults;
         }
 
-        public void setExcludeDefaults(Boolean excludeDefaults) {
+        public void setExcludeDefaults(boolean excludeDefaults) {
             this.excludeDefaults = excludeDefaults;
         }
     }
